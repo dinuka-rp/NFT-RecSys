@@ -6,7 +6,11 @@ const NFTAssetCard = ({ cardDetails }) => {
   // name, collectionSlug, tokenId, assetContractAddr, reason
 
   return (
-    <Card>
+    <Card
+      onClick={() => {
+        // display DetailsView
+      }}
+    >
       {/* <div>
         <div>NFT Name:</div>
         <div>{cardDetails.name}</div>
@@ -68,7 +72,7 @@ const Card = styled(glassBox)`
     border-radius: 12px;
   }
 
-  .txtGroup{
+  .txtGroup {
     width: 90%;
     margin: auto;
   }
@@ -91,7 +95,7 @@ const Card = styled(glassBox)`
 
   &:hover {
     box-shadow: rgba(0, 0, 0, 0.2) 0px 20px 30px;
-    height: 498px;    // TODO: change this only if reason is availalble
+    height: 498px; // TODO: change this only if reason is availalble
 
     .reasonTxtSection {
       opacity: 1;
