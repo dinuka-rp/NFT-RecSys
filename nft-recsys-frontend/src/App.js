@@ -3,7 +3,12 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 // import "antd/dist/antd.css"; // or 'antd/dist/antd.less'
 import "./styles/antd-styling-changes.css"; // or 'antd/dist/antd.less'
 import Home from "./pages/Home";
-import Trends from "./pages/Trends";
+import TrendsManagementUser from "./pages/TrendsManagementUser";
+import TrendsManagementAdmin from "./pages/TrendsManagementAdmin";
+import GeneratedRecFeed from "./pages/GeneratedRecFeed";
+import BiasAdjusterUser from "./pages/BiasAdjusterUser";
+import BiasAdjusterAdmin from "./pages/BiasAdjusterAdmin";
+import AddRefNFTs from "./pages/AddRefNFTs";
 
 function App() {
   return (
@@ -11,7 +16,18 @@ function App() {
       <Router>
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/trends-recommendations" element={<Trends />} />
+          <Route path="/trends-management" element={<TrendsManagementUser />} />
+          <Route
+            path="/admin/trends-management"
+            element={<TrendsManagementAdmin />}
+          />
+          <Route path="/reference-entry" element={<AddRefNFTs />} />
+          <Route
+            path="/generated-recommendations"
+            element={<GeneratedRecFeed />}
+          />
+          <Route path="/personal-bias" element={<BiasAdjusterUser />} />
+          <Route path="/admin/default-bias" element={<BiasAdjusterAdmin />} />
         </Routes>
       </Router>
       {/* ref: https://reactrouter.com/docs/en/v6/upgrading/v5 */}
@@ -20,6 +36,5 @@ function App() {
 }
 
 export default App;
-
 
 // UI storyboards images folder: https://drive.google.com/drive/folders/1a-jLO1oE4nDlf3qUckyiHT8Zke7KVEgr?usp=sharing
