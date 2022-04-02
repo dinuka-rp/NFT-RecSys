@@ -4,12 +4,14 @@ import { glassBox } from "../styles/common-styled";
 
 const NFTAssetCard = ({ cardDetails }) => {
   // name, collectionSlug, tokenId, assetContractAddr, reason
+  const reason = cardDetails?.reason;
 
   return (
     <Card
       onClick={() => {
         // display DetailsView
       }}
+      reason={reason}
     >
       {/* <div>
         <div>NFT Name:</div>
@@ -33,7 +35,7 @@ const NFTAssetCard = ({ cardDetails }) => {
             {cardDetails.assetContractAddr}
           </div>
         </div>
-        {cardDetails?.reason ? (
+        {reason ? (
           <div className="txtBlock reasonTxtSection">
             {/* reason for recommending */}
             <div className="label">
@@ -62,14 +64,16 @@ const Card = styled(glassBox)`
   // transition: width 1s ease-in-out;
   cursor: pointer; // uncomment this after adding expansion
 
-  //  TODO:crop & fit image inside (square corners may go out)
-
   .imgContainer {
     width: 290px;
     height: 310px;
     margin: 5px 5px;
     background-color: #ccc;
     border-radius: 12px;
+
+    img {
+      object-fit: cover;
+    }
   }
 
   .txtGroup {
@@ -95,7 +99,10 @@ const Card = styled(glassBox)`
 
   &:hover {
     box-shadow: rgba(0, 0, 0, 0.2) 0px 20px 30px;
-    height: 498px; // TODO: change this only if reason is availalble
+    height: ${(props) =>
+      props.reason
+        ? "498px"
+        : "470px"}; // TODO: change this only if reason is availalble
 
     .reasonTxtSection {
       opacity: 1;
