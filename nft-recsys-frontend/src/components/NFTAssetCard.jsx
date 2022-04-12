@@ -102,7 +102,7 @@ const Card = styled(glassBox)`
     height: ${(props) =>
       props.reason
         ? "498px"
-        : "470px"}; // TODO: change this only if reason is availalble
+        : "470px"}; // change this only if reason is availalble
 
     .reasonTxtSection {
       opacity: 1;
