@@ -3,9 +3,16 @@ package main
 import (
 	"github.com/gin-gonic/gin"
 	"net/http"
+	"nft-recsys-proxy/controllers"
 )
 
 func Routes(Router *gin.Engine) {
+
+	RoutesV1 := Router.Group("/v1.0")
+	{
+		// have a request to relay GET info from Python ML Flask API
+		RoutesV1.GET("/info", controllers.GetTraitBaseRec) //FIXME
+	}
 
 	/*
 		Stupid simple ping endpoint for status checks
