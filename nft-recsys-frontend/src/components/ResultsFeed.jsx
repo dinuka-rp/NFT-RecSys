@@ -14,12 +14,13 @@ const ResultsFeed = ({ results }) => {
   return (
     <div>
       <header>
+        {/* TODO: this title should probably move out to the headings of respective pages? */}
         <Title>NFT Rec-Sys</Title>
       </header>
       <ResultsGrid>
-        {results.map((result) => (
+        {results.map((result, index) => (
           <NFTAssetCard
-            key={"asset-card-" + result.id}
+            key={"asset-card-" + index}
             cardDetails={exampleCardDetails}
           />
         ))}

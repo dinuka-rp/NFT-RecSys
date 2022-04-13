@@ -1,4 +1,4 @@
-import { PlusOutlined, MinusOutlined } from "@ant-design/icons";
+import { PlusOutlined, DeleteOutlined } from "@ant-design/icons";
 import { Button, Input, message } from "antd";
 import React, { useState } from "react";
 import styled from "styled-components";
@@ -7,6 +7,11 @@ import { PageContainer } from "../styles/common-styled";
 
 // This is a view to get user's inputs to generate recommendations - the NFTs entered here need not be
 // in the system, but recommendations will be generated from what is available in the system.
+
+
+// Adding reference items, Loading recommendations, Generated Rec can all be in the same page
+// TODO: Check>> have all components and switch on the same page without redirecting. Take use of React's capabilities.
+// Otherwise need to store/ pass reference items to the next page?
 
 const AddRefNFTs = () => {
   const [chosenItems, setChosenItems] = useState(["1", "2", "3"]);
@@ -89,18 +94,18 @@ const AddRefNFTs = () => {
           {chosenItems ? (
             chosenItems.map((item, index) => (
               <div className="cardContainer">
-                {/* // TODO: add remove item option */}
                 <NFTAssetCard
                   key={"asset-card-" + index}
                   cardDetails={exampleCardDetails}
                 />
+                {/* This button jumps around, needs to be fixed */}
                 <Button
                   type="text"
                   danger
                   key={"asset-card-remove" + index}
                   onClick={() => removeItem(item)}
                 >
-                  <MinusOutlined />
+                  <DeleteOutlined />
                 </Button>
               </div>
             ))
@@ -112,7 +117,7 @@ const AddRefNFTs = () => {
 
       {/* <section> */}
       {/* <h2>Conditions</h2> */}
-      {/* TODO: let the user pick which kind of recommendations they prioritize (trends/ trait-content/ rarity) */}
+      {/* TODO: let the user pick which kind of recommendations they prioritize (trends/ trait-content/ rarity) - can be done in User-bias selection page */}
       {/* </section> */}
 
       <div style={{ float: "right" }}>
@@ -156,10 +161,7 @@ const ChosenItemsStrip = styled.div`
 const NewAdditionSec = styled.div`
   padding: 2em;
   max-width: 90vw;
-  // margin: auto;
   display: flex;
-  // flex-wrap: wrap;
-  // justify-content: space-evenly;
 
   background-color: #fff;
   border: 1px solid #eee;
