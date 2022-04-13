@@ -8,7 +8,7 @@ import ResultsFeed from "../components/ResultsFeed";
 // Have a btn to go to input/ explore NFTs
 
 const Home = () => {
-  const results = ["", "", "", "", ""];
+  const results = ["", "", "", "", "", "", "",""];
 
   return (
     <>

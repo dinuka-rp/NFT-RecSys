@@ -54,6 +54,7 @@ const NFTAssetCard = ({ cardDetails }) => {
 export default NFTAssetCard;
 
 const Card = styled(glassBox)`
+  display: inline-block;
   width: 300px;
   height: 470px;
   margin: 2.3em 1em;

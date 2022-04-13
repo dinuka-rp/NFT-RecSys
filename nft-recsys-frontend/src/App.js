@@ -1,6 +1,6 @@
 // import './App.css';
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-// import "antd/dist/antd.css"; // or 'antd/dist/antd.less'
+import "antd/dist/antd.css"; // or 'antd/dist/antd.less'
 import "./styles/antd-styling-changes.css"; // or 'antd/dist/antd.less'
 import Home from "./pages/Home";
 import TrendsManagementUser from "./pages/TrendsManagementUser";
