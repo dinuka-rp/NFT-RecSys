@@ -33,6 +33,7 @@ def get_trait_similarity_recommendations():
 
     return jsonify(data)
 
+# TODO: create multi reference ids endpoint for recommendations
 
 # TODO: remove random data & endpoint - used to test jsonify
 # info endpoint
@@ -48,7 +49,7 @@ def get_trait_similarity_recommendations():
 
 if __name__ == "__main__":
     # load & preprocess dataset
-    load_preprocess_data()
+    # load_preprocess_data()
 
     # change port - this is not working for some reason
     app.run(host="localhost", port=5003)

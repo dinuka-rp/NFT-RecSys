@@ -21,7 +21,6 @@ from sklearn.feature_extraction.text import CountVectorizer
 
 def load_preprocess_data():
     """## Get Dataset"""
-
     # TODO (Extra): mongo(later, if time permites)
 
     assets_file_path = "../../datasets/bayc-nft-assets"

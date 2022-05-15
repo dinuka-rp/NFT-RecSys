@@ -58,7 +58,7 @@ def get_trait_rarity_recommendations():
 
 if __name__ == "__main__":
     # load & preprocess dataset
-    load_preprocess_data()
+    # load_preprocess_data()
 
     # change port - this is not working for some reason
     app.run(host="localhost", port=5003)
