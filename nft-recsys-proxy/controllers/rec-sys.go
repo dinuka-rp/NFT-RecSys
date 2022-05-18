@@ -36,3 +36,20 @@ func GetTraitBaseRec(c *gin.Context) {
 		"data":   response,
 	})
 }
+
+// GetBasicContentRec  Get pre-generated recommendations - content based
+func GetBasicContentRec(c *gin.Context) {
+	referenceId := c.Query("reference_id")
+
+	url := util.BasicContentRecSysEndpoint + "/rec?reference_id=" + referenceId
+	remoteResponse := util.GetFromRemoteAPI(url, c)
+
+	if remoteResponse == nil {
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"status": "success",
+		"data":   remoteResponse,
+	})
+}

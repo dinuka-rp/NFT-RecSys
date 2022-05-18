@@ -13,7 +13,8 @@ func Routes(Router *gin.Engine) {
 		// have a request to relay GET info from Python ML Flask API
 		//RoutesV1.GET("/info", controllers.GetTraitBaseRec) //FIXME
 		//RoutesV1.GET("/rec/featured", controllers.) //TODO
-		RoutesV1.GET("/rec/trait", controllers.GetTraitBaseRec) //TODO
+		RoutesV1.GET("/rec/trait", controllers.GetTraitBaseRec)
+		RoutesV1.GET("/rec/basic-content", controllers.GetBasicContentRec)
 	}
 
 	/*

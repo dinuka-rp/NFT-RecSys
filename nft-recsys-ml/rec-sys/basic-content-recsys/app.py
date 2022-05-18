@@ -1,6 +1,6 @@
 # save this as app.py
 from flask import Flask, jsonify, request
-from basic_content_based_nft_recommender_system import description_content_based_recommendations, load_preprocess_data
+from basic_content_based_nft_recommender_system import description_content_based_recommendations, create_rec_response
 
 app = Flask(__name__)
 
@@ -21,14 +21,12 @@ def get_trait_similarity_recommendations():
     # reference_item_id = '0x495f947276749ce646f68ac8c248420045cb7b5e-57422959511997337577873730268633988669226471548944456734432444570123223695361'     # get from query param?
 
     if(request.method == 'GET'):
-        generated_recommendations, cosine_similarities = description_content_based_recommendations(reference_item_id)
+        recommended_nfts_arr, cosine_sim_scores_of_recommendations_arr = description_content_based_recommendations(reference_item_id)
+        rec_resp = create_rec_response(recommended_nfts_arr, cosine_sim_scores_of_recommendations_arr)
+        # print(rec_resp)
 
-        # TODO: add collection name used for reference as well for clarity
         data = {
-            'content_rec': {
-                'items': generated_recommendations,
-                'cosine_similarities': cosine_similarities
-            }
+            'content_rec': rec_resp
         }
 
     return jsonify(data)
