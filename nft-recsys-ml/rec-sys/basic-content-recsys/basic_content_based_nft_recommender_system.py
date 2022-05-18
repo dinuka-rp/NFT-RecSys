@@ -163,21 +163,6 @@ load_preprocess_data()  # FIXME: this can't be removed, running the code in __ma
 # everything is loaded on startup
 
 
-def create_rec_response(recommended_nfts_arr, cosine_sim_scores_of_recommendations_arr):
-
-  # return the original data of the nft using the original_df dataframe (convert to an array of dictionaries and return)
-  results_df = original_df.loc[recommended_nfts_arr]
-
-  # append column with cosine_sim_scores
-  for index, nft in enumerate(recommended_nfts_arr):
-    # print(index)
-    results_df.at[nft, 'cosine_sim'] = cosine_sim_scores_of_recommendations_arr[index]
-  
-  results_df = results_df.astype(object).where(pd.notnull(results_df),None)
-  
-  return results_df.to_dict('records')
-
-
 # function that takes in reference_id (nft_contract_address-nft_id) as input and returns the top 10 recommended nfts
 def description_content_based_recommendations(reference_id, cosine_sim = cosine_sim):
     
@@ -201,6 +186,21 @@ def description_content_based_recommendations(reference_id, cosine_sim = cosine_
         
     return recommended_nfts, cosine_sim_scores_of_recommendations
 
+
+
+def create_rec_response(recommended_nfts_arr, cosine_sim_scores_of_recommendations_arr):
+
+  # return the original data of the nft using the original_df dataframe (convert to an array of dictionaries and return)
+  results_df = original_df.loc[recommended_nfts_arr]
+
+  # append column with cosine_sim_scores
+  for index, nft in enumerate(recommended_nfts_arr):
+    # print(index)
+    results_df.at[nft, 'cosine_sim'] = cosine_sim_scores_of_recommendations_arr[index]
+  
+  results_df = results_df.astype(object).where(pd.notnull(results_df),None)
+  
+  return results_df.to_dict('records')
 
 """## Testing"""
 

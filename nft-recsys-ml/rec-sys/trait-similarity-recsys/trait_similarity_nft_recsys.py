@@ -24,14 +24,17 @@ def load_preprocess_data():
     # TODO (Extra): mongo(later, if time permites)
 
     assets_file_path = "../../datasets/bayc-nft-assets"
-    global df
-    df = pd.read_csv(assets_file_path, sep='\t')
+    global original_df
+    original_df = pd.read_csv(assets_file_path, sep='\t')
 
 
     """## Data Cleaning"""
 
     for index, row in df.iterrows():
         df.at[index,'reference_id'] = row["asset_contract_address"] + "-" + str(row["nft_id"])
+
+    global df
+    df = original_df.copy(deep=True)
 
     df['traits_string'] = df['traits_string'].str.replace(';;',' ')
 
@@ -99,6 +102,22 @@ def content_based_recommendations(reference_id, cosine_sim = cosine_sim):
         recommended_nfts.append(list(df.index)[i])
         
     return recommended_nfts, cosine_sim_scores_of_recommendations
+
+
+
+def create_rec_response(recommended_nfts_arr, cosine_sim_scores_of_recommendations_arr):
+
+  # return the original data of the nft using the original_df dataframe (convert to an array of dictionaries and return)
+  results_df = original_df.loc[recommended_nfts_arr]
+
+  # append column with cosine_sim_scores
+  for index, nft in enumerate(recommended_nfts_arr):
+    # print(index)
+    results_df.at[nft, 'cosine_sim'] = cosine_sim_scores_of_recommendations_arr[index]
+  
+  results_df = results_df.astype(object).where(pd.notnull(results_df),None)
+  
+  return results_df.to_dict('records')
 
 
 # TODO: add multi item referencing

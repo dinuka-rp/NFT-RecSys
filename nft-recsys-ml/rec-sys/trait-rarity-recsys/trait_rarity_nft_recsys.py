@@ -7,14 +7,17 @@ import pandas as pd
 def load_preprocess_data():
     """## Get Dataset"""
     assets_file_path = "../../datasets/bayc-nft-assets"
-    global df
-    df = pd.read_csv(assets_file_path, sep='\t')
+    global original_df
+    original_df = pd.read_csv(assets_file_path, sep='\t')
 
     """## Data Cleaning"""
 # TODO: remove unwanted preprocessing steps - may not be needed for this model
-    for index, row in df.iterrows():
-        df.at[index,'reference_id'] = row["asset_contract_address"] + "-" + str(row["nft_id"])
+    for index, row in original_df.iterrows():
+        original_df.at[index,'reference_id'] = row["asset_contract_address"] + "-" + str(row["nft_id"])
 
+    global df
+    df = original_df.copy(deep=True)
+    
     df['traits_string'] = df['traits_string'].str.replace(';;',' ')
 
     df.set_index('reference_id', inplace = True)   # set reference_id as the index of the dataframe
@@ -22,6 +25,8 @@ def load_preprocess_data():
     df = df[['traits_string','total_rarity']]
 
 load_preprocess_data()
+
+
 
 # function that takes in reference_id as input and returns the top 10 recommended nfts
 def trait_rarity_recommendations(reference_id):
@@ -42,6 +47,22 @@ def trait_rarity_recommendations(reference_id):
     # print(df_sort['total_rarity'].tolist())
 
     return recommended_nfts, trait_rarity_scores_of_recommendations
+
+
+
+def create_rec_response(recommended_nfts_arr, total_rarity_scores_of_recommendations_arr):
+
+    # return the original data of the nft using the original_df dataframe (convert to an array of dictionaries and return)
+    results_df = original_df.loc[recommended_nfts_arr]
+
+    # append column with total_rarity_scores
+    for index, nft in enumerate(recommended_nfts_arr):
+        # print(index)
+        results_df.at[nft, 'total_rarity'] = total_rarity_scores_of_recommendations_arr[index]
+
+    results_df = results_df.astype(object).where(pd.notnull(results_df),None)
+
+    return results_df.to_dict('records')
 
 
 # get trait-rarity based recommendations from multiple items

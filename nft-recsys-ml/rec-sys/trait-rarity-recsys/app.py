@@ -1,6 +1,6 @@
 # save this as app.py
 from flask import Flask, jsonify, request
-from trait_rarity_nft_recsys import trait_rarity_recommendations
+from trait_rarity_nft_recsys import trait_rarity_recommendations, create_rec_response
 
 app = Flask(__name__)
 
@@ -18,17 +18,17 @@ def get_trait_rarity_recommendations():
     # reference_item_id = '0xbc4ca0eda7647a8ab7c2061c2e118a18a936f13d-9948'     # get from query param
 
     if(request.method == 'GET'):
-        generated_recommendations, total_rarities = trait_rarity_recommendations(reference_item_id)
+        recommended_nfts_arr, total_rarity_scores_of_recommendations_arr = trait_rarity_recommendations(reference_item_id)
+        
+        rec_resp = create_rec_response(recommended_nfts_arr, total_rarity_scores_of_recommendations_arr)
 
         # TODO: return rarity of reference item as well
 
-        # TODO: add collection name used for reference as well for clarity
         data = {
-            # 'rarity_rec': {
-                'items': generated_recommendations,
-                'total_rarities': total_rarities
-            # }
+            'rarity_rec': rec_resp,
+            # 'ref_item': 
         }
+
 
     return jsonify(data)
 

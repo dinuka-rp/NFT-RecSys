@@ -26,7 +26,8 @@ def get_trait_similarity_recommendations():
         # print(rec_resp)
 
         data = {
-            'content_rec': rec_resp
+            'content_rec': rec_resp,
+            # 'ref_item': 
         }
 
     return jsonify(data)
