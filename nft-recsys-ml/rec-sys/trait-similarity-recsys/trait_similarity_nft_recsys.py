@@ -30,8 +30,8 @@ def load_preprocess_data():
 
     """## Data Cleaning"""
 
-    for index, row in df.iterrows():
-        df.at[index,'reference_id'] = row["asset_contract_address"] + "-" + str(row["nft_id"])
+    for index, row in original_df.iterrows():
+        original_df.at[index,'reference_id'] = row["asset_contract_address"] + "-" + str(row["nft_id"])
 
     global df
     df = original_df.copy(deep=True)

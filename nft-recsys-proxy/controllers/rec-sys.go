@@ -53,3 +53,20 @@ func GetBasicContentRec(c *gin.Context) {
 		"data":   remoteResponse,
 	})
 }
+
+// GetTrendsRec  Get pre-generated recommendations - trends based
+func GetTrendsRec(c *gin.Context) {
+	referenceId := c.Query("reference_id")
+
+	url := util.TrendsRecSysEndpoint + "/rec?reference_id=" + referenceId
+	remoteResponse := util.GetFromRemoteAPI(url, c)
+
+	if remoteResponse == nil {
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"status": "success",
+		"data":   remoteResponse,
+	})
+}

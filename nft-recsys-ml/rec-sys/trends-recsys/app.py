@@ -1,6 +1,6 @@
 # save this as app.py
 from flask import Flask, jsonify, request
-from trends_content_nft_recsys import trends_based_recommendations
+from trends_content_nft_recsys import trends_based_recommendations, create_rec_response
 
 app = Flask(__name__)
 
@@ -15,12 +15,11 @@ def hello():
 @app.route("/rec")
 def get_trait_similarity_recommendations():
     if(request.method == 'GET'):
-        generated_recommendations = trends_based_recommendations()
+        top_trending_nfts_df = trends_based_recommendations()
+        rec_resp = create_rec_response(top_trending_nfts_df)
 
         data = {
-            'trends_featured_rec': {
-                'items': generated_recommendations,
-            }
+            'trends_featured_rec': rec_resp
         }
 
     return jsonify(data)

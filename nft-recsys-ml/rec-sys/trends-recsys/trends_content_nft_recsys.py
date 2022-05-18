@@ -29,12 +29,14 @@ def load_preprocess_data():
   ### NFT Data
   """
   assets_file_path = "../../datasets/collected-nft-assets-unique"
-  df = pd.read_csv(assets_file_path, sep='\t')
+  global original_df
+  original_df = pd.read_csv(assets_file_path, sep='\t')
+
 
   """## Data Cleaning"""
 
-  for index, row in df.iterrows():
-      df.at[index,'reference_id'] = row["asset_contract_address"] + "-" + str(row["nft_id"])
+  for index, row in original_df.iterrows():
+      original_df.at[index,'reference_id'] = row["asset_contract_address"] + "-" + str(row["nft_id"])
 
   """Clean duplicate data in dataframe
   """
@@ -42,7 +44,11 @@ def load_preprocess_data():
   # df.drop_duplicates(subset ="reference_id", keep = False, inplace = True)
 
   # dropping ALL duplicate values
-  df.drop_duplicates(subset="reference_id", keep='first', inplace = True)
+  original_df.drop_duplicates(subset="reference_id", keep='first', inplace = True)
+
+  global df
+  df = original_df.copy(deep=True)
+
 
   """## Rake Vectorizer
   Vectorize words
@@ -121,6 +127,8 @@ def load_preprocess_data():
   df['All_key_words_str'].count()
 
   df.set_index('reference_id', inplace = True)   # set reference_id as the index of the dataframe
+  original_df.set_index('reference_id', inplace = True)   # set reference_id as the index of the dataframe
+
 
   df.drop(columns = [col for col in df.columns if not col.startswith("All_key_words")], inplace = True)
 
@@ -321,17 +329,27 @@ def trends_based_recommendations():
   # sort dataframe based on trend_score
   top_trending_df = trending_df.sort_values(by=['trend_score'], ascending=False)
 
-  top_trending_items = list(pd.Series(top_trending_df.index))
+  # top_trending_items = list(pd.Series(top_trending_df.index))
   
   #TODO: this may have to return all the data: would be better to in all recsys models - have a param to check if required?
   
-  return top_trending_items
+  return top_trending_df
 
+
+def create_rec_response(recommended_nfts_df):
+
+  # return the original data of the nft using the original_df dataframe (convert to an array of dictionaries and return)
+  # https://www.statology.org/pandas-merge-on-index/
+  results_df = recommended_nfts_df.join(original_df)
+
+  results_df = results_df.astype(object).where(pd.notnull(results_df),None)
+
+  return results_df.to_dict('records')
 
 
 """## Testing"""
-top_trending_items = trends_based_recommendations()
-print("top_trending_items", top_trending_items)
+# top_trending_items = trends_based_recommendations()
+# print("top_trending_items", top_trending_items)
 
 
 # get other testing/ eval functions from colab notebook if required
