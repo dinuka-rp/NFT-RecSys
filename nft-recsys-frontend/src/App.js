@@ -8,30 +8,42 @@ import TrendsManagementAdmin from "./pages/TrendsManagementAdmin";
 import BiasAdjusterUser from "./pages/BiasAdjusterUser";
 import BiasAdjusterAdmin from "./pages/BiasAdjusterAdmin";
 import GenerateByRef from "./pages/GenerateByRef";
+import Help from "./pages/Help";
 
 function App() {
-  return (
-    <div>
-      <Router>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/trends-management" element={<TrendsManagementUser />} />
-          <Route
-            path="/admin/trends-management"
-            element={<TrendsManagementAdmin />}
-          />
-          <Route path="/reference-rec" element={<GenerateByRef />} />
-          {/* <Route
+    return (
+        <div>
+            <Router>
+                <Routes>
+                    <Route path="/" element={<Home />} />
+                    <Route
+                        path="/trends-management"
+                        element={<TrendsManagementUser />}
+                    />
+                    <Route
+                        path="/admin/trends-management"
+                        element={<TrendsManagementAdmin />}
+                    />
+                    <Route path="/reference-rec" element={<GenerateByRef />} />
+                    <Route path="/help" element={<Help />} />
+
+                    {/* <Route
             path="/generated-recommendations"
             element={<GeneratedRecFeed />}
           /> */}
-          <Route path="/personal-bias" element={<BiasAdjusterUser />} />
-          <Route path="/admin/default-bias" element={<BiasAdjusterAdmin />} />
-        </Routes>
-      </Router>
-      {/* ref: https://reactrouter.com/docs/en/v6/upgrading/v5 */}
-    </div>
-  );
+                    <Route
+                        path="/personal-bias"
+                        element={<BiasAdjusterUser />}
+                    />
+                    <Route
+                        path="/admin/default-bias"
+                        element={<BiasAdjusterAdmin />}
+                    />
+                </Routes>
+            </Router>
+            {/* ref: https://reactrouter.com/docs/en/v6/upgrading/v5 */}
+        </div>
+    );
 }
 
 export default App;

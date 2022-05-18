@@ -1,5 +1,5 @@
 import { PlusOutlined, DeleteOutlined } from "@ant-design/icons";
-import { Button, Input, message, Switch } from "antd";
+import { Button, Input, message, Slider, Switch } from "antd";
 import React, { useState } from "react";
 import styled from "styled-components";
 import GeneratedRecFeed from "../components/GeneratedRecFeed";
@@ -24,6 +24,7 @@ import { PageContainer } from "../styles/common-styled";
 const GenerateByRef = () => {
     const [chosenItems, setChosenItems] = useState([]);
     const [isTraitBasedRec, setIsTraitBasedRec] = useState(true);
+    const [chosenBias, setChosenBias] = useState(50);
 
     const [nftAssetContractToBeAdded, setNftAssetContractToBeAdded] =
         useState(null);
@@ -31,24 +32,26 @@ const GenerateByRef = () => {
 
     const [recommendedItems, setRecommendedItems] = useState();
 
-    // placeholder card details
-    // const exampleCardDetails = {
-    //     name: "Ape",
-    //     collectionSlug: "ape-collection",
-    //     tokenId: 101,
-    //     assetContractAddr: "0xbc4ca0eda7647a8ab7c2061c2e118a18a936f13d",
-    //     // img:""
-    // };
+    const marks = {
+        0: "Trait Similarity-based Recommendations",
+        50: "default bias",
+        100: {
+            style: {
+                color: "black",
+            },
+            label: "Trait Rarity-based Recommendations",
+        },
+    };
 
     const addReferenceItem = async () => {
         if (
             nftAssetContractToBeAdded !== null &&
             nftTokenIdToBeAdded !== null
         ) {
-            const newItem = {
-                assetContractAddress: nftAssetContractToBeAdded,
-                tokenId: nftTokenIdToBeAdded,
-            };
+            // const newItem = {
+            //     assetContractAddress: nftAssetContractToBeAdded,
+            //     tokenId: nftTokenIdToBeAdded,
+            // };
 
             // fetch NFT data to be displayed?
             if (isTraitBasedRec) {
@@ -56,7 +59,7 @@ const GenerateByRef = () => {
                     `${nftAssetContractToBeAdded}-${nftTokenIdToBeAdded}`
                 );
 
-                const refItemInfo = resp.data
+                const refItemInfo = resp.data;
 
                 // add new item to chosen reference items list
                 setChosenItems([refItemInfo, ...chosenItems]);
@@ -64,7 +67,7 @@ const GenerateByRef = () => {
                 const resp = await retrieveItemInfoBasicContent(
                     `${nftAssetContractToBeAdded}-${nftTokenIdToBeAdded}`
                 );
-                const refItemInfo = resp.data
+                const refItemInfo = resp.data;
 
                 // add new item to chosen reference items list
                 setChosenItems([refItemInfo, ...chosenItems]);
@@ -159,7 +162,42 @@ const GenerateByRef = () => {
                 </div>
             </section>
 
+            {isTraitBasedRec && (
+                <section style={{ marginBottom: "5rem" }}>
+                    <hr />
+                    <h3>
+                        Choose you bias preference for displaying
+                        recommendations
+                    </h3>
+                    {/* <span style={{ margin: "1.2em" }}>
+                        Trait Similarity-based Recommendations
+                    </span> */}
+
+                    {/* https://ant.design/components/slider/ */}
+                    <div style={{ width: "80%", margin: "auto" }}>
+                        {/* TODO: use the value obtained here to choose displaying items */}
+                        <Slider
+                            // style={}
+                            defaultValue={10}
+                            tooltipVisible
+                            min={0}
+                            // max={20}
+                            onChange={(e) => {
+                                setChosenBias(e);
+                            }}
+                            value={chosenBias}
+                            marks={marks}
+                        />
+                    </div>
+
+                    {/* <span style={{ margin: "1.2em" }}>
+                        Trait Rarity-based Recommendations
+                    </span> */}
+                </section>
+            )}
+
             <section>
+                <hr />
                 <h2>Add New Reference NFT</h2>
 
                 <NewAdditionSec>
@@ -186,6 +224,7 @@ const GenerateByRef = () => {
             </section>
 
             <section>
+                <hr />
                 <h2>Chosen Reference NFTs</h2>
 
                 <ChosenItemsStrip>
@@ -233,6 +272,7 @@ const GenerateByRef = () => {
 
             {recommendedItems && (
                 <section style={{ marginTop: "7rem" }}>
+                    <hr />
                     <h1>Generated Recommendations</h1>
 
                     <GeneratedRecFeed recommendedItems={recommendedItems} />
