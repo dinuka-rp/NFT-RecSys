@@ -33,7 +33,7 @@ def load_preprocess_data():
     for index, row in df.iterrows():
         df.at[index,'reference_id'] = row["asset_contract_address"] + "-" + str(row["nft_id"])
 
-    df['traits_string'] = df['traits_string'].str.replace(';',' ')
+    df['traits_string'] = df['traits_string'].str.replace(';;',' ')
 
     df.set_index('reference_id', inplace = True)   # set reference_id as the index of the dataframe
 

@@ -4,6 +4,9 @@ from trends_content_nft_recsys import trends_based_recommendations
 
 app = Flask(__name__)
 
+# to run on specific port: python3 -m flask run -p 5004
+
+
 # status check ping-pong endpoint
 @app.route("/ping")
 def hello():

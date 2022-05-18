@@ -6,8 +6,8 @@ app = Flask(__name__)
 
 # export FLASK_APP=app.py
 # python3 -m flask run
-# export FLASK_RUN_PORT=5002
-# to run on specific port: python3 -m flask run -p 3000
+# export FLASK_RUN_PORT=5005
+# to run on specific port: python3 -m flask run -p 5005
 
 # status check ping-pong endpoint
 @app.route("/ping")
@@ -17,7 +17,7 @@ def hello():
 @app.route("/rec")
 def get_trait_similarity_recommendations():
     request_args = request.args
-    reference_item_id = request_args.get('reference_item_id')
+    reference_item_id = request_args.get('reference_id')
     # reference_item_id = '0x495f947276749ce646f68ac8c248420045cb7b5e-57422959511997337577873730268633988669226471548944456734432444570123223695361'     # get from query param?
 
     if(request.method == 'GET'):

@@ -27,7 +27,7 @@ def load_preprocess_data():
 
   """## Get Dataset"""
 
-  assets_file_path = "../../datasets/collected-nft-assets"
+  assets_file_path = "../../datasets/collected-nft-assets-unique"
   global df
   df = pd.read_csv(assets_file_path, sep='\t')
 

@@ -28,7 +28,7 @@ def load_preprocess_data():
 
   ### NFT Data
   """
-  assets_file_path = "../../datasets/collected-nft-assets"
+  assets_file_path = "../../datasets/collected-nft-assets-unique"
   df = pd.read_csv(assets_file_path, sep='\t')
 
   """## Data Cleaning"""

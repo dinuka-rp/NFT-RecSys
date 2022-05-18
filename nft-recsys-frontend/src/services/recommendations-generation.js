@@ -3,8 +3,7 @@ import { traitRecEndpoint, trendsRecEndpoint } from "../endpoints";
 
 // Get pre-generated recommendations - trait content + trait rarity
 export async function retrieveTraitBasedRecommendations(initRefItem) {
-  // TODO: change request param to query param here
-  const res = await axios.get(traitRecEndpoint + `/${initRefItem}`, {});
+  const res = await axios.get(traitRecEndpoint + `?reference_id=${initRefItem}`, {});
 
   return res.data;
 }

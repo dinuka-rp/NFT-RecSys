@@ -1,8 +1,10 @@
 # save this as app.py
 from flask import Flask, jsonify, request
-from trait_rarity_nft_recsys import trait_rarity_recommendations,trait_rarity_recommendations_multi, load_preprocess_data
+from trait_rarity_nft_recsys import trait_rarity_recommendations
 
 app = Flask(__name__)
+
+# to run on specific port: python3 -m flask run -p 5003
 
 # status check ping-pong endpoint
 @app.route("/ping")
@@ -12,7 +14,7 @@ def hello():
 @app.route("/rec")
 def get_trait_rarity_recommendations():
     request_args = request.args
-    reference_item_id = request_args.get('reference_item_id')
+    reference_item_id = request_args.get('reference_id')
     # reference_item_id = '0xbc4ca0eda7647a8ab7c2061c2e118a18a936f13d-9948'     # get from query param
 
     if(request.method == 'GET'):
@@ -22,10 +24,10 @@ def get_trait_rarity_recommendations():
 
         # TODO: add collection name used for reference as well for clarity
         data = {
-            'rarity_rec': {
+            # 'rarity_rec': {
                 'items': generated_recommendations,
                 'total_rarities': total_rarities
-            }
+            # }
         }
 
     return jsonify(data)

@@ -6,17 +6,33 @@ import (
 	"nft-recsys-proxy/util"
 )
 
-// GetTraitBaseRec  Get pre-generated recommendations - trait content + trait rarity
+// GetTraitBaseRec  Get pre-generated recommendations - trait similarity + trait rarity
 func GetTraitBaseRec(c *gin.Context) {
-	url := util.TraitContentRecSysEndpoint + "/info"
-	remoteResponse := util.GetFromRemoteAPI(url, c)
+	referenceId := c.Query("reference_id")
 
-	if remoteResponse == nil {
+	similarityUrl := util.TraitSimilarityRecSysEndpoint + "/rec?reference_id=" + referenceId
+	remoteResponseSimilarity := util.GetFromRemoteAPI(similarityUrl, c)
+
+	rarityUrl := util.TraitRarityRecSysEndpoint + "/rec?reference_id=" + referenceId
+	remoteResponseRarity := util.GetFromRemoteAPI(rarityUrl, c)
+
+	if remoteResponseSimilarity == nil && remoteResponseRarity == nil {
 		return
+	}
+
+	// ----- structure response data
+	type responseMap struct {
+		SimilarityRec interface{} `json:"similarity_based_rec,omitempty"`
+		RarityRec     interface{} `json:"rarity_based_rec,omitempty"`
+	}
+
+	var response = responseMap{
+		SimilarityRec: remoteResponseSimilarity,
+		RarityRec:     remoteResponseRarity,
 	}
 
 	c.JSON(http.StatusOK, gin.H{
 		"status": "success",
-		"data":   remoteResponse,
+		"data":   response,
 	})
 }
