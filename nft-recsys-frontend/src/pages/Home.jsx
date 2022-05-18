@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import ResultsFeed from "../components/ResultsFeed";
 import styled from "styled-components";
+import { retrieveTrendsBasedRecommendations } from "../services/recommendations-generation";
 
 // The final view that is expected to be displayed here is not decided yet
 // show recommendations based on passed preferences?
@@ -9,7 +10,16 @@ import styled from "styled-components";
 // Have a btn to go to input/ explore NFTs
 
 const Home = () => {
-    const results = ["", "", "", "", "", "", "", ""];
+    const [trendFeatItems, setTrendFeatItems] = useState([]);
+
+    useEffect(() => {
+        async function fetchData() {
+            const resp = await retrieveTrendsBasedRecommendations();
+            console.log(resp.data)
+            setTrendFeatItems(resp.data.trends_featured_rec);
+        }
+        fetchData();
+    }, []);
 
     return (
         <>
@@ -17,7 +27,7 @@ const Home = () => {
                 <Title>NFT Rec-Sys</Title>
             </header>
 
-            <ResultsFeed results={results} />
+            {trendFeatItems && <ResultsFeed results={trendFeatItems} />}
         </>
     );
 };

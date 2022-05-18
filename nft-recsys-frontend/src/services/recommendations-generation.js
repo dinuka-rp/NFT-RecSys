@@ -1,9 +1,16 @@
 import axios from "axios";
-import { traitRecEndpoint, trendsRecEndpoint } from "../endpoints";
+import { basicContentRecEndpoint, traitRecEndpoint, trendsRecEndpoint } from "../endpoints";
 
 // Get pre-generated recommendations - trait content + trait rarity
 export async function retrieveTraitBasedRecommendations(initRefItem) {
   const res = await axios.get(traitRecEndpoint + `?reference_id=${initRefItem}`, {});
+
+  return res.data;
+}
+
+// Get pre-generated recommendations - basic content
+export async function retrieveBasicContentBasedRecommendations(initRefItem) {
+  const res = await axios.get(basicContentRecEndpoint + `?reference_id=${initRefItem}`, {});
 
   return res.data;
 }

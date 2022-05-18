@@ -18,21 +18,21 @@ const NFTAssetCard = ({ cardDetails }) => {
         <div>{cardDetails.name}</div>
       </div> */}
       <div className="imgContainer">
-        <img src="" alt="nft"></img>
+        <img src={cardDetails.image_url} alt="nft"></img>
       </div>
       <div className="txtGroup">
         <div className="txtBlock">
           <div className="label">NFT Collection:</div>
-          <div className="value">{cardDetails.collectionSlug}</div>
+          <div className="value">{cardDetails.collection_name}</div>
         </div>
         <div className="txtBlock">
           <div className="label">NFT Token ID:</div>
-          <div className="value">{cardDetails.tokenId}</div>
+          <div className="value">{cardDetails.nft_id}</div>
         </div>
         <div className="txtBlock">
           <div className="label">NFT Asset Contract Address:</div>
           <div className="value" style={{ fontSize: "0.6rem" }}>
-            {cardDetails.assetContractAddr}
+            {cardDetails.asset_contract_address}
           </div>
         </div>
         {reason ? (
@@ -71,9 +71,12 @@ const Card = styled(glassBox)`
     margin: 5px 5px;
     background-color: #ccc;
     border-radius: 12px;
+    overflow: hidden;
 
     img {
       object-fit: cover;
+      height:100%;
+      width:100%;
     }
   }
 
@@ -92,6 +95,8 @@ const Card = styled(glassBox)`
 
   .value {
     font-weight: 600;
+    overflow: hidden;
+    white-space: nowrap;
   }
 
   .reasonTxtSection {
