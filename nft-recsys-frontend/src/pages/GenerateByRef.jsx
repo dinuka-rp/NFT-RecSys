@@ -1,10 +1,13 @@
 import { PlusOutlined, DeleteOutlined } from "@ant-design/icons";
-import { Button, Input, message } from "antd";
+import { Button, Input, message, Switch } from "antd";
 import React, { useState } from "react";
 import styled from "styled-components";
 import GeneratedRecFeed from "../components/GeneratedRecFeed";
 import NFTAssetCard from "../components/NFTAssetCard";
-import { retrieveTraitBasedRecommendations } from "../services/recommendations-generation";
+import {
+    retrieveBasicContentBasedRecommendations,
+    retrieveTraitBasedRecommendations,
+} from "../services/recommendations-generation";
 import { PageContainer } from "../styles/common-styled";
 
 // This is a view to get user's inputs to generate recommendations - the NFTs entered here need not be
@@ -16,6 +19,7 @@ import { PageContainer } from "../styles/common-styled";
 
 const GenerateByRef = () => {
     const [chosenItems, setChosenItems] = useState([]);
+    const [isTraitBasedRec, setIsTraitBasedRec] = useState(true);
 
     const [nftAssetContractToBeAdded, setNftAssetContractToBeAdded] =
         useState(null);
@@ -73,18 +77,35 @@ const GenerateByRef = () => {
     const generateRecommendations = async () => {
         if (chosenItems.length > 0) {
             if (chosenItems.length === 1) {
-                const resp = await retrieveTraitBasedRecommendations(`${chosenItems[0].assetContractAddress}-${chosenItems[0].tokenId}`);
-                // console.log(resp.data);
+                if (isTraitBasedRec) {
+                    const respTrait = await retrieveTraitBasedRecommendations(
+                        `${chosenItems[0].assetContractAddress}-${chosenItems[0].tokenId}`
+                    );
+                    // console.log(resp.data);
 
-                const similarityRec = resp.data.similarity_based_rec.similarity_rec
-                console.log(similarityRec)
+                    const similarityRec =
+                        respTrait.data.similarity_based_rec.similarity_rec;
+                    console.log(similarityRec);
 
-                // TODO: use a fixed bias for now and combine the two responses - combine trait and rarity outputs together
-                // The ones that come in both need to be shown ?
+                    // TODO: trait rarity resp needs to be shown as well
 
-                setRecommendedItems(similarityRec);
-            } else{
-                message.error("Using multiple reference items isn't currently supported by the system")
+                    // TODO: use a fixed bias for now and combine the two responses - combine trait and rarity outputs together
+                    // The ones that come in both need to be shown ?
+
+                    setRecommendedItems(similarityRec);
+                } else {
+                    const respBasicContent =
+                        await retrieveBasicContentBasedRecommendations(
+                            `${chosenItems[0].assetContractAddress}-${chosenItems[0].tokenId}`
+                        );
+                    // console.log(respBasicContent);
+                    const results = respBasicContent.data.content_rec;
+                    setRecommendedItems(results);
+                }
+            } else {
+                message.error(
+                    "Using multiple reference items isn't currently supported by the system"
+                );
             }
         } else {
             message.warning(
@@ -95,8 +116,26 @@ const GenerateByRef = () => {
 
     return (
         <PageContainer>
-            <h1>Select Reference NFT</h1>
+            <h1>Reference NFT Based Recommendations</h1>
 
+            <section>
+                <div>
+                    <span style={{ margin: "1.2em" }}>
+                        Description content-based Recommendations
+                    </span>
+                    <Switch
+                        defaultChecked
+                        onChange={(e) => {
+                            // console.log(e);
+                            setIsTraitBasedRec(e);
+                        }}
+                    />
+                    <span style={{ margin: "1.2em" }}>
+                        Trait-based Recommendations
+                    </span>
+                </div>
+            </section>
+            
             <section>
                 <h2>Add New Reference NFT</h2>
 
@@ -131,7 +170,7 @@ const GenerateByRef = () => {
                         chosenItems.map((item, index) => (
                             <div className="cardContainer">
                                 <NFTAssetCard
-                                    key={"asset-card-" + index}
+                                    key={"ref-asset-card-" + index}
                                     cardDetails={exampleCardDetails}
                                 />
                                 {/* This button jumps around, needs to be fixed */}
@@ -153,7 +192,7 @@ const GenerateByRef = () => {
 
             {/* <section> */}
             {/* <h2>Conditions</h2> */}
-            {/* TODO: let the user pick which kind of recommendations they prioritize (trends/ trait-content/ rarity) - can be done in User-bias selection page */}
+            {/* TODO: let the user pick which kind of recommendations they prioritize (content-based/ trait-content/ rarity) - can be done in User-bias selection page */}
             {/* </section> */}
 
             <section>
@@ -170,7 +209,7 @@ const GenerateByRef = () => {
             </section>
 
             {recommendedItems && (
-                <section  style={{marginTop:"7rem"}}>
+                <section style={{ marginTop: "7rem" }}>
                     <h1>Generated Recommendations</h1>
 
                     <GeneratedRecFeed recommendedItems={recommendedItems} />
