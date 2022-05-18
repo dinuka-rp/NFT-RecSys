@@ -21,6 +21,7 @@ def load_preprocess_data():
     df['traits_string'] = df['traits_string'].str.replace(';;',' ')
 
     df.set_index('reference_id', inplace = True)   # set reference_id as the index of the dataframe
+    original_df.set_index('reference_id', inplace = True)   # set reference_id as the index of the dataframe
 
     df = df[['traits_string','total_rarity']]
 
