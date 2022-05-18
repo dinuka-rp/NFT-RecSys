@@ -4,21 +4,24 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import GeneratedRecFeed from "../components/GeneratedRecFeed";
 import NFTAssetCard from "../components/NFTAssetCard";
+import { retrieveTraitBasedRecommendations } from "../services/recommendations-generation";
 import { PageContainer } from "../styles/common-styled";
 
 // This is a view to get user's inputs to generate recommendations - the NFTs entered here need not be
 // in the system, but recommendations will be generated from what is available in the system.
 
 // Adding reference items, Loading recommendations, Generated Rec can all be in the same page
-// TODO: Check>> have all components and switch on the same page without redirecting. Make use of React's capabilities.
+// Check>> have all components and switch on the same page without redirecting. Make use of React's capabilities.
 // Otherwise need to store/ pass reference items to the next page
 
 const GenerateByRef = () => {
-    const [chosenItems, setChosenItems] = useState(["1", "2", "3"]);
+    const [chosenItems, setChosenItems] = useState([]);
 
     const [nftAssetContractToBeAdded, setNftAssetContractToBeAdded] =
-        useState("");
-    const [nftTokenIdToBeAdded, setNftTokenIdToBeAdded] = useState("");
+        useState(null);
+    const [nftTokenIdToBeAdded, setNftTokenIdToBeAdded] = useState(null);
+
+    const [recommendedItems, setRecommendedItems] = useState();
 
     // placeholder card details
     const exampleCardDetails = {
@@ -32,20 +35,32 @@ const GenerateByRef = () => {
     const addReferenceItem = () => {
         // fetch NFT data to be displayed?
 
-        console.log(nftAssetContractToBeAdded);
-        console.log(nftTokenIdToBeAdded);
+        // console.log(nftAssetContractToBeAdded);
+        // console.log(nftTokenIdToBeAdded);
 
-        const newItem = {
-            assetContractAddress: nftAssetContractToBeAdded,
-            tokenId: nftTokenIdToBeAdded,
-        };
+        if (
+            nftAssetContractToBeAdded !== null &&
+            nftTokenIdToBeAdded !== null
+        ) {
+            const newItem = {
+                assetContractAddress: nftAssetContractToBeAdded,
+                tokenId: nftTokenIdToBeAdded,
+            };
 
-        // add new item to chosen reference items list
-        setChosenItems([newItem, ...chosenItems]);
+            // add new item to chosen reference items list
+            setChosenItems([newItem, ...chosenItems]);
 
-        console.log(chosenItems);
-        message.success("Adding new reference NFT was successful");
+            console.log(chosenItems);
+            message.success("Adding new reference NFT was successful");
+        } else {
+            message.warning(
+                "Please make sure that you've entered both the NFT Contract Address & Token Id correctly"
+            );
+            setNftAssetContractToBeAdded(null);
+            setNftTokenIdToBeAdded(null);
+        }
     };
+
     const removeItem = (itemToBeRemoved) => {
         const currentListOfItems = [...chosenItems];
         const newListOfItems = currentListOfItems.filter(
@@ -55,11 +70,32 @@ const GenerateByRef = () => {
         setChosenItems(newListOfItems);
     };
 
-    const generateRecommendations = () => {};
+    const generateRecommendations = async () => {
+        if (chosenItems.length > 0) {
+            if (chosenItems.length === 1) {
+                const resp = await retrieveTraitBasedRecommendations(`${chosenItems[0].assetContractAddress}-${chosenItems[0].tokenId}`);
+                // console.log(resp.data);
+
+                const similarityRec = resp.data.similarity_based_rec.similarity_rec
+                console.log(similarityRec)
+
+                // TODO: use a fixed bias for now and combine the two responses - combine trait and rarity outputs together
+                // The ones that come in both need to be shown ?
+
+                setRecommendedItems(similarityRec);
+            } else{
+                message.error("Using multiple reference items isn't currently supported by the system")
+            }
+        } else {
+            message.warning(
+                "Please choose NFTs to be considered as a reference for recommendations"
+            );
+        }
+    };
 
     return (
         <PageContainer>
-            <h1>Reference NFTs</h1>
+            <h1>Select Reference NFT</h1>
 
             <section>
                 <h2>Add New Reference NFT</h2>
@@ -120,18 +156,26 @@ const GenerateByRef = () => {
             {/* TODO: let the user pick which kind of recommendations they prioritize (trends/ trait-content/ rarity) - can be done in User-bias selection page */}
             {/* </section> */}
 
-            <div style={{ float: "right" }}>
-                <Button
-                    type="primary"
-                    shape="round"
-                    size="large"
-                    onClick={generateRecommendations}
-                >
-                    Generate Recommendations
-                </Button>
-            </div>
+            <section>
+                <div style={{ float: "right" }}>
+                    <Button
+                        type="primary"
+                        shape="round"
+                        size="large"
+                        onClick={generateRecommendations}
+                    >
+                        Generate Recommendations
+                    </Button>
+                </div>
+            </section>
 
-            <GeneratedRecFeed />
+            {recommendedItems && (
+                <section  style={{marginTop:"7rem"}}>
+                    <h1>Generated Recommendations</h1>
+
+                    <GeneratedRecFeed recommendedItems={recommendedItems} />
+                </section>
+            )}
         </PageContainer>
     );
 };

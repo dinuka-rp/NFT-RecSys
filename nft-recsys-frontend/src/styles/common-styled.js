@@ -19,7 +19,8 @@ export const PageContainer = styled.div`
   // display: flex;
 
   section {
-    margin-bottom: 1.3em;
+    margin-bottom: 1.6em;
+    margin-top: 1.6em;
   }
 
   @media screen and (max-width: 768px) {

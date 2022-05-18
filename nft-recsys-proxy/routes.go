@@ -17,6 +17,7 @@ func Routes(Router *gin.Engine) {
 		RoutesV1.GET("/rec/trends", controllers.GetTrendsRec)
 		//RoutesV1.GET("/rec/featured", controllers.)
 
+		//	TODO: have a GET endpoint to get data from NFT
 	}
 
 	/*
