@@ -202,7 +202,19 @@ def create_rec_response(recommended_nfts_arr, cosine_sim_scores_of_recommendatio
   
   return results_df.to_dict('records')
 
+
+def get_data_of_reference_nft(reference_id):
+  ref_data_df = original_df.loc[[reference_id]]
+
+  ref_data_df = ref_data_df.astype(object).where(pd.notnull(ref_data_df),None)
+  
+  return ref_data_df.to_dict('records')[0]
+
 """## Testing"""
 
 # resp = description_content_based_recommendations('0x495f947276749ce646f68ac8c248420045cb7b5e-57422959511997337577873730268633988669226471548944456734432444570123223695361')
 # print("description_content_based_recommendations", resp)
+
+
+# resp = get_data_of_reference_nft('0x495f947276749ce646f68ac8c248420045cb7b5e-57422959511997337577873730268633988669226471548944456734432444570123223695361')
+# print("data_of_reference_nft", resp)

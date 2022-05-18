@@ -1,6 +1,6 @@
 # save this as app.py
 from flask import Flask, jsonify, request
-from basic_content_based_nft_recommender_system import description_content_based_recommendations, create_rec_response
+from basic_content_based_nft_recommender_system import description_content_based_recommendations, create_rec_response, get_data_of_reference_nft
 
 app = Flask(__name__)
 
@@ -13,6 +13,19 @@ app = Flask(__name__)
 @app.route("/ping")
 def hello():
     return "pong"
+
+@app.route("/ref-info")
+def get_reference_nft_info():
+    request_args = request.args
+    reference_item_id = request_args.get('reference_id')
+
+    if(request.method == 'GET'):
+        rec_resp = get_data_of_reference_nft(reference_item_id)
+        # print(rec_resp)
+
+        data = rec_resp
+    return jsonify(data)
+
 
 @app.route("/rec")
 def get_trait_similarity_recommendations():

@@ -18,6 +18,8 @@ func Routes(Router *gin.Engine) {
 		//RoutesV1.GET("/rec/featured", controllers.)
 
 		//	TODO: have a GET endpoint to get data from NFT
+		RoutesV1.GET("/item-info/trait", controllers.GetInfoTrait)
+		RoutesV1.GET("/item-info/basic-content", controllers.GetInfoBasicContent)
 	}
 
 	/*

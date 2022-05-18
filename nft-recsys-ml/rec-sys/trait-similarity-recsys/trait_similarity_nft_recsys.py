@@ -124,6 +124,14 @@ def create_rec_response(recommended_nfts_arr, cosine_sim_scores_of_recommendatio
 # TODO: add multi item referencing
 
 
+def get_data_of_reference_nft(reference_id):
+  ref_data_df = original_df.loc[[reference_id]]
+
+  ref_data_df = ref_data_df.astype(object).where(pd.notnull(ref_data_df),None)
+  
+  return ref_data_df.to_dict('records')[0]
+  
+
 """## Testing
 
 Recommendation based on content similarity of traits matches

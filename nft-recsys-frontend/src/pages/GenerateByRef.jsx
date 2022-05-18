@@ -8,6 +8,10 @@ import {
     retrieveBasicContentBasedRecommendations,
     retrieveTraitBasedRecommendations,
 } from "../services/recommendations-generation";
+import {
+    retrieveItemInfoTrait,
+    retrieveItemInfoBasicContent,
+} from "../services/item-info";
 import { PageContainer } from "../styles/common-styled";
 
 // This is a view to get user's inputs to generate recommendations - the NFTs entered here need not be
@@ -28,20 +32,15 @@ const GenerateByRef = () => {
     const [recommendedItems, setRecommendedItems] = useState();
 
     // placeholder card details
-    const exampleCardDetails = {
-        name: "Ape",
-        collectionSlug: "ape-collection",
-        tokenId: 101,
-        assetContractAddr: "0xbc4ca0eda7647a8ab7c2061c2e118a18a936f13d",
-        // img:""
-    };
+    // const exampleCardDetails = {
+    //     name: "Ape",
+    //     collectionSlug: "ape-collection",
+    //     tokenId: 101,
+    //     assetContractAddr: "0xbc4ca0eda7647a8ab7c2061c2e118a18a936f13d",
+    //     // img:""
+    // };
 
-    const addReferenceItem = () => {
-        // fetch NFT data to be displayed?
-
-        // console.log(nftAssetContractToBeAdded);
-        // console.log(nftTokenIdToBeAdded);
-
+    const addReferenceItem = async () => {
         if (
             nftAssetContractToBeAdded !== null &&
             nftTokenIdToBeAdded !== null
@@ -51,8 +50,25 @@ const GenerateByRef = () => {
                 tokenId: nftTokenIdToBeAdded,
             };
 
-            // add new item to chosen reference items list
-            setChosenItems([newItem, ...chosenItems]);
+            // fetch NFT data to be displayed?
+            if (isTraitBasedRec) {
+                const resp = await retrieveItemInfoTrait(
+                    `${nftAssetContractToBeAdded}-${nftTokenIdToBeAdded}`
+                );
+
+                const refItemInfo = resp.data
+
+                // add new item to chosen reference items list
+                setChosenItems([refItemInfo, ...chosenItems]);
+            } else {
+                const resp = await retrieveItemInfoBasicContent(
+                    `${nftAssetContractToBeAdded}-${nftTokenIdToBeAdded}`
+                );
+                const refItemInfo = resp.data
+
+                // add new item to chosen reference items list
+                setChosenItems([refItemInfo, ...chosenItems]);
+            }
 
             console.log(chosenItems);
             message.success("Adding new reference NFT was successful");
@@ -85,14 +101,21 @@ const GenerateByRef = () => {
 
                     const similarityRec =
                         respTrait.data.similarity_based_rec.similarity_rec;
-                    console.log(similarityRec);
+                    console.log("similarityRec: ", similarityRec);
 
                     // TODO: trait rarity resp needs to be shown as well
+                    const rarityRec =
+                        respTrait.data.rarity_based_rec.rarity_rec;
+                    console.log("rarityRec: ", rarityRec);
 
                     // TODO: use a fixed bias for now and combine the two responses - combine trait and rarity outputs together
                     // The ones that come in both need to be shown ?
 
-                    setRecommendedItems(similarityRec);
+                    // TODO: add reasons to all these
+                    const allRecommendations = similarityRec.concat(rarityRec);
+                    console.log("allRecommendations: ", allRecommendations);
+
+                    setRecommendedItems(allRecommendations);
                 } else {
                     const respBasicContent =
                         await retrieveBasicContentBasedRecommendations(
@@ -135,7 +158,7 @@ const GenerateByRef = () => {
                     </span>
                 </div>
             </section>
-            
+
             <section>
                 <h2>Add New Reference NFT</h2>
 
@@ -171,7 +194,7 @@ const GenerateByRef = () => {
                             <div className="cardContainer">
                                 <NFTAssetCard
                                     key={"ref-asset-card-" + index}
-                                    cardDetails={exampleCardDetails}
+                                    cardDetails={item}
                                 />
                                 {/* This button jumps around, needs to be fixed */}
                                 <Button
