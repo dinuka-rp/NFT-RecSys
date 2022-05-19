@@ -8,7 +8,7 @@ import TrendsManagementAdmin from "./pages/TrendsManagementAdmin";
 import BiasAdjusterUser from "./pages/BiasAdjusterUser";
 import BiasAdjusterAdmin from "./pages/BiasAdjusterAdmin";
 import GenerateByRef from "./pages/GenerateByRef";
-import Help from "./pages/Help";
+import Docs from "./pages/Docs";
 
 function App() {
     return (
@@ -25,7 +25,7 @@ function App() {
                         element={<TrendsManagementAdmin />}
                     />
                     <Route path="/reference-rec" element={<GenerateByRef />} />
-                    <Route path="/help" element={<Help />} />
+                    <Route path="/docs" element={<Docs />} />
 
                     {/* <Route
             path="/generated-recommendations"

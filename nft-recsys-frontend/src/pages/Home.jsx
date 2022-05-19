@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import ResultsFeed from "../components/ResultsFeed";
 import styled from "styled-components";
 import { retrieveTrendsBasedRecommendations } from "../services/recommendations-generation";
+import Layout from "../layouts/Layout";
 
 // The final view that is expected to be displayed here is not decided yet
 // show recommendations based on passed preferences?
@@ -15,20 +16,20 @@ const Home = () => {
     useEffect(() => {
         async function fetchData() {
             const resp = await retrieveTrendsBasedRecommendations();
-            console.log(resp.data)
+            console.log(resp.data);
             setTrendFeatItems(resp.data.trends_featured_rec);
         }
         fetchData();
     }, []);
 
     return (
-        <>
+        <Layout>
             <header>
                 <Title>NFT Rec-Sys</Title>
             </header>
 
             {trendFeatItems && <ResultsFeed results={trendFeatItems} />}
-        </>
+        </Layout>
     );
 };
 

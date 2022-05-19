@@ -13,6 +13,7 @@ import {
     retrieveItemInfoBasicContent,
 } from "../services/item-info";
 import { PageContainer } from "../styles/common-styled";
+import Layout from "../layouts/Layout";
 
 // This is a view to get user's inputs to generate recommendations - the NFTs entered here need not be
 // in the system, but recommendations will be generated from what is available in the system.
@@ -141,144 +142,148 @@ const GenerateByRef = () => {
     };
 
     return (
-        <PageContainer>
-            <h1>Reference NFT Based Recommendations</h1>
+        <Layout>
+            <PageContainer>
+                <h1>Reference NFT Based Recommendations</h1>
 
-            <section>
-                <div>
-                    <span style={{ margin: "1.2em" }}>
-                        Description content-based Recommendations
-                    </span>
-                    <Switch
-                        defaultChecked
-                        onChange={(e) => {
-                            // console.log(e);
-                            setIsTraitBasedRec(e);
-                        }}
-                    />
-                    <span style={{ margin: "1.2em" }}>
-                        Trait-based Recommendations
-                    </span>
-                </div>
-            </section>
+                <section>
+                    <div>
+                        <span style={{ margin: "1.2em" }}>
+                            Description content-based Recommendations
+                        </span>
+                        <Switch
+                            defaultChecked
+                            onChange={(e) => {
+                                // console.log(e);
+                                setIsTraitBasedRec(e);
+                            }}
+                        />
+                        <span style={{ margin: "1.2em" }}>
+                            Trait-based Recommendations
+                        </span>
+                    </div>
+                </section>
 
-            {isTraitBasedRec && (
-                <section style={{ marginBottom: "5rem" }}>
-                    <hr />
-                    <h3>
-                        Choose you bias preference for displaying
-                        recommendations
-                    </h3>
-                    {/* <span style={{ margin: "1.2em" }}>
+                {isTraitBasedRec && (
+                    <section style={{ marginBottom: "5rem" }}>
+                        <hr />
+                        <h3>
+                            Choose you bias preference for displaying
+                            recommendations
+                        </h3>
+                        {/* <span style={{ margin: "1.2em" }}>
                         Trait Similarity-based Recommendations
                     </span> */}
 
-                    {/* https://ant.design/components/slider/ */}
-                    <div style={{ width: "80%", margin: "auto" }}>
-                        {/* TODO: use the value obtained here to choose displaying items */}
-                        <Slider
-                            // style={}
-                            defaultValue={10}
-                            tooltipVisible
-                            min={0}
-                            // max={20}
-                            onChange={(e) => {
-                                setChosenBias(e);
-                            }}
-                            value={chosenBias}
-                            marks={marks}
-                        />
-                    </div>
+                        {/* https://ant.design/components/slider/ */}
+                        <div style={{ width: "80%", margin: "auto" }}>
+                            {/* TODO: use the value obtained here to choose displaying items */}
+                            <Slider
+                                // style={}
+                                defaultValue={10}
+                                tooltipVisible
+                                min={0}
+                                // max={20}
+                                onChange={(e) => {
+                                    setChosenBias(e);
+                                }}
+                                value={chosenBias}
+                                marks={marks}
+                            />
+                        </div>
 
-                    {/* <span style={{ margin: "1.2em" }}>
+                        {/* <span style={{ margin: "1.2em" }}>
                         Trait Rarity-based Recommendations
                     </span> */}
-                </section>
-            )}
+                    </section>
+                )}
 
-            <section>
-                <hr />
-                <h2>Add New Reference NFT</h2>
-
-                <NewAdditionSec>
-                    <Input
-                        placeholder="NFT Asset Contract Address"
-                        onChange={(e) => {
-                            setNftAssetContractToBeAdded(e.target.value);
-                        }}
-                    />
-                    <Input
-                        placeholder="NFT Token ID"
-                        onChange={(e) => {
-                            setNftTokenIdToBeAdded(e.target.value);
-                        }}
-                    />
-
-                    <Button
-                        shape="circle"
-                        size="large"
-                        icon={<PlusOutlined />}
-                        onClick={addReferenceItem}
-                    />
-                </NewAdditionSec>
-            </section>
-
-            <section>
-                <hr />
-                <h2>Chosen Reference NFTs</h2>
-
-                <ChosenItemsStrip>
-                    {chosenItems ? (
-                        chosenItems.map((item, index) => (
-                            <div className="cardContainer">
-                                <NFTAssetCard
-                                    key={"ref-asset-card-" + index}
-                                    cardDetails={item}
-                                />
-                                {/* This button jumps around, needs to be fixed */}
-                                <Button
-                                    type="text"
-                                    danger
-                                    key={"asset-card-remove" + index}
-                                    onClick={() => removeItem(item)}
-                                >
-                                    <DeleteOutlined />
-                                </Button>
-                            </div>
-                        ))
-                    ) : (
-                        <>No Items Chosen</>
-                    )}
-                </ChosenItemsStrip>
-            </section>
-
-            {/* <section> */}
-            {/* <h2>Conditions</h2> */}
-            {/* TODO: let the user pick which kind of recommendations they prioritize (content-based/ trait-content/ rarity) - can be done in User-bias selection page */}
-            {/* </section> */}
-
-            <section>
-                <div style={{ float: "right" }}>
-                    <Button
-                        type="primary"
-                        shape="round"
-                        size="large"
-                        onClick={generateRecommendations}
-                    >
-                        Generate Recommendations
-                    </Button>
-                </div>
-            </section>
-
-            {recommendedItems && (
-                <section style={{ marginTop: "7rem" }}>
+                <section>
                     <hr />
-                    <h1>Generated Recommendations</h1>
+                    <h2>Add New Reference NFT</h2>
 
-                    <GeneratedRecFeed recommendedItems={recommendedItems} />
+                    <NewAdditionSec>
+                        <Input
+                            placeholder="NFT Asset Contract Address"
+                            onChange={(e) => {
+                                setNftAssetContractToBeAdded(e.target.value);
+                            }}
+                        />
+                        <Input
+                            placeholder="NFT Token ID"
+                            onChange={(e) => {
+                                setNftTokenIdToBeAdded(e.target.value);
+                            }}
+                        />
+
+                        <Button
+                            shape="circle"
+                            size="large"
+                            icon={<PlusOutlined />}
+                            onClick={addReferenceItem}
+                        />
+                    </NewAdditionSec>
                 </section>
-            )}
-        </PageContainer>
+
+                <section>
+                    <hr />
+                    <h2>Chosen Reference NFTs</h2>
+
+                    <ChosenItemsStrip>
+                        {chosenItems.length > 0 ? (
+                            chosenItems.map((item, index) => (
+                                <div className="cardContainer">
+                                    <NFTAssetCard
+                                        key={"ref-asset-card-" + index}
+                                        cardDetails={item}
+                                    />
+                                    {/* This button jumps around, needs to be fixed */}
+                                    <Button
+                                        type="text"
+                                        danger
+                                        key={"asset-card-remove" + index}
+                                        onClick={() => removeItem(item)}
+                                    >
+                                        <DeleteOutlined />
+                                    </Button>
+                                </div>
+                            ))
+                        ) : (
+                            <div style={{ color: "#bbb" }}>
+                                No items have been chosen
+                            </div>
+                        )}
+                    </ChosenItemsStrip>
+                </section>
+
+                {/* <section> */}
+                {/* <h2>Conditions</h2> */}
+                {/* TODO: let the user pick which kind of recommendations they prioritize (content-based/ trait-content/ rarity) - can be done in User-bias selection page */}
+                {/* </section> */}
+
+                <section>
+                    <div style={{ float: "right" }}>
+                        <Button
+                            type="primary"
+                            shape="round"
+                            size="large"
+                            onClick={generateRecommendations}
+                        >
+                            Generate Recommendations
+                        </Button>
+                    </div>
+                </section>
+
+                {recommendedItems && (
+                    <section style={{ marginTop: "7rem" }}>
+                        <hr />
+                        <h1>Generated Recommendations</h1>
+
+                        <GeneratedRecFeed recommendedItems={recommendedItems} />
+                    </section>
+                )}
+            </PageContainer>
+        </Layout>
     );
 };
 
