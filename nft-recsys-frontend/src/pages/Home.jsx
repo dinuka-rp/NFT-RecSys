@@ -25,7 +25,7 @@ const Home = () => {
     return (
         <Layout>
             <header>
-                <Title>NFT Rec-Sys</Title>
+                <Title>NFT-RecSys</Title>
             </header>
 
             {trendFeatItems && <ResultsFeed results={trendFeatItems} />}

@@ -120,13 +120,13 @@ const GenerateByRef = () => {
                     // TODO: add percentage similarity to all these
                     for (let index = 0; index < similarityRec.length; index++) {
                         const element = similarityRec[index];
-                        element.reason = "Similar Trait Content"
-                        similarityRec[index] = element
+                        element.reason = "Similar Trait Content";
+                        similarityRec[index] = element;
                     }
                     for (let index = 0; index < rarityRec.length; index++) {
                         const element = rarityRec[index];
-                        element.reason = "Similar Trait Rarity"
-                        rarityRec[index] = element
+                        element.reason = "Similar Trait Rarity";
+                        rarityRec[index] = element;
                     }
 
                     const allRecommendations = similarityRec.concat(rarityRec);
@@ -136,7 +136,7 @@ const GenerateByRef = () => {
                 } else {
                     const respBasicContent =
                         await retrieveBasicContentBasedRecommendations(
-                            `${chosenItems[0].assetContractAddress}-${chosenItems[0].tokenId}`
+                            `${chosenItems[0].asset_contract_address}-${chosenItems[0].nft_id}`
                         );
                     // console.log(respBasicContent);
                     const results = respBasicContent.data.content_rec;
