@@ -2,7 +2,6 @@ import { PlusOutlined, DeleteOutlined } from "@ant-design/icons";
 import { Button, Input, message, Slider, Switch } from "antd";
 import React, { useState } from "react";
 import styled from "styled-components";
-import GeneratedRecFeed from "../components/GeneratedRecFeed";
 import NFTAssetCard from "../components/NFTAssetCard";
 import {
     retrieveBasicContentBasedRecommendations,
@@ -14,6 +13,7 @@ import {
 } from "../services/item-info";
 import { PageContainer } from "../styles/common-styled";
 import Layout from "../layouts/Layout";
+import ResultsFeed from "../components/ResultsFeed";
 
 // This is a view to get user's inputs to generate recommendations - the NFTs entered here need not be
 // in the system, but recommendations will be generated from what is available in the system.
@@ -99,15 +99,16 @@ const GenerateByRef = () => {
             if (chosenItems.length === 1) {
                 if (isTraitBasedRec) {
                     const respTrait = await retrieveTraitBasedRecommendations(
-                        `${chosenItems[0].assetContractAddress}-${chosenItems[0].tokenId}`
+                        `${chosenItems[0].asset_contract_address}-${chosenItems[0].nft_id}`
                     );
                     // console.log(resp.data);
 
+                    //  trait content similarity resp
                     const similarityRec =
                         respTrait.data.similarity_based_rec.similarity_rec;
                     console.log("similarityRec: ", similarityRec);
 
-                    // TODO: trait rarity resp needs to be shown as well
+                    //  trait rarity resp
                     const rarityRec =
                         respTrait.data.rarity_based_rec.rarity_rec;
                     console.log("rarityRec: ", rarityRec);
@@ -115,7 +116,19 @@ const GenerateByRef = () => {
                     // TODO: use a fixed bias for now and combine the two responses - combine trait and rarity outputs together
                     // The ones that come in both need to be shown ?
 
-                    // TODO: add reasons to all these
+                    // add percentage similarity reasons to all these
+                    // TODO: add percentage similarity to all these
+                    for (let index = 0; index < similarityRec.length; index++) {
+                        const element = similarityRec[index];
+                        element.reason = "Similar Trait Content"
+                        similarityRec[index] = element
+                    }
+                    for (let index = 0; index < rarityRec.length; index++) {
+                        const element = rarityRec[index];
+                        element.reason = "Similar Trait Rarity"
+                        rarityRec[index] = element
+                    }
+
                     const allRecommendations = similarityRec.concat(rarityRec);
                     console.log("allRecommendations: ", allRecommendations);
 
@@ -279,7 +292,7 @@ const GenerateByRef = () => {
                         <hr />
                         <h1>Generated Recommendations</h1>
 
-                        <GeneratedRecFeed recommendedItems={recommendedItems} />
+                        <ResultsFeed results={recommendedItems} />
                     </section>
                 )}
             </PageContainer>

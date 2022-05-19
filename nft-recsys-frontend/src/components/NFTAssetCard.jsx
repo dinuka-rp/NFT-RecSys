@@ -7,12 +7,7 @@ const NFTAssetCard = ({ cardDetails }) => {
     const reason = cardDetails?.reason;
 
     return (
-        <Card
-            onClick={() => {
-                // display DetailsView
-            }}
-            reason={reason}
-        >
+        <Card reason={reason}>
             {/* <div>
         <div>NFT Name:</div>
         <div>{cardDetails.name}</div>
@@ -42,7 +37,7 @@ const NFTAssetCard = ({ cardDetails }) => {
 
                         {/* reason for recommending */}
                         <div className="label">
-                            Related Trait
+                            {reason}
                             {/* {cardDetails.reason} */}
                         </div>
                     </div>

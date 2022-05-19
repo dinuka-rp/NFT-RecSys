@@ -11,6 +11,7 @@ const Docs = () => {
                     How to Generate Recommendations using the Recommendations
                     Engine?
                 </h2>
+
                 <p>
                     <u>Generating Social Trends-based Recommendations</u>
                     <ul>
@@ -31,6 +32,9 @@ const Docs = () => {
                             trends-based recommendations
                         </li>
                     </ul>
+                </p>
+
+                <p>
                     <u>Generating Basic Content-based Recommendations</u>
                     <ul>
                         <li>
@@ -69,6 +73,9 @@ const Docs = () => {
                             generate & view the recommendations
                         </li>
                     </ul>
+                </p>
+
+                <p>
                     <u>Generating Trait based Recommendations</u>
                     <ul>
                         <li>
@@ -120,6 +127,9 @@ const Docs = () => {
                             <em>Bored Ape Yacht Club</em>
                         </li>
                     </ul>
+                </p>
+                
+                <p>
                     Click on any of the items to view all the information used
                     to generating the recommendations and the details of the
                     item in a modal window.

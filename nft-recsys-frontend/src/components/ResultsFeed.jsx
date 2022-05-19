@@ -1,24 +1,58 @@
-import React from "react";
+import { Button, Modal } from "antd";
+import React, { useState } from "react";
 import styled from "styled-components";
 import NFTAssetCard from "./NFTAssetCard";
 
 const ResultsFeed = ({ results }) => {
-    // const exampleCardDetails = {
-    //     name: "Ape",
-    //     collectionSlug: "ape-collection",
-    //     tokenId: 101,
-    //     assetContractAddr: "0xbc4ca0eda7647a8ab7c2061c2e118a18a936f13d",
-    //     // img:""
-    // };
-
+    const [modalVisible, setModalVisible] = useState(false);
+    const [chosenItemDetails, setChosenItemDetails] = useState();
     return (
         <div>
+            {chosenItemDetails && (
+                <>
+                    <Modal
+                        title={`${chosenItemDetails.asset_contract_address}-${chosenItemDetails?.nft_id} NFT Details`}
+                        centered
+                        visible={modalVisible}
+                        onOk={() => setModalVisible(false)}
+                        onCancel={() => setModalVisible(false)}
+                        width={"80vw"}
+                        height={"80vh"}
+                        footer={[
+                            <Button
+                                key="modal-link"
+                                href={chosenItemDetails.open_sea_link}
+                                type="primary"
+                                onClick={() => setModalVisible(false)}
+                            >
+                                View on OpenSea
+                            </Button>,
+                            <Button
+                                key="close-modal"
+                                onClick={() => setModalVisible(false)}
+                            >
+                                Close
+                            </Button>,
+                        ]}
+                    >
+                        <pre>{JSON.stringify(chosenItemDetails, null, 4)}</pre>
+                    </Modal>
+                </>
+            )}
             <ResultsGrid>
                 {results.map((result, index) => (
-                    <NFTAssetCard
-                        key={"asset-card-" + index}
-                        cardDetails={result}
-                    />
+                    <div
+                        key={"asset-card-div" + index}
+                        onClick={() => {
+                            setChosenItemDetails(result);
+                            setModalVisible(true);
+                        }}
+                    >
+                        <NFTAssetCard
+                            key={"asset-card-" + index}
+                            cardDetails={result}
+                        />
+                    </div>
                 ))}
             </ResultsGrid>
         </div>
